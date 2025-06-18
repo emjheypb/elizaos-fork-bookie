@@ -133,9 +133,10 @@ const action: Action = {
         }
 
         // Add details about recent orders
-        const recentOrders = orders.slice(0, 5);
+        const recentOrdersCount = Math.min(5, orders.length);
+        const recentOrders = orders.slice(0, recentOrdersCount);
         if (recentOrders.length > 0) {
-          responseText += `Your ${recentOrders.length < 5 ? recentOrders.length : 10} most recent orders:\n`;
+          responseText += `Your ${recentOrders.length < 5 ? recentOrders.length : recentOrdersCount} most recent orders:\n`;
           recentOrders.forEach((order: any, index: number) => {
             const market = marketsResponse.markets.find((market) => market.ticker === order.ticker);
             const price =
