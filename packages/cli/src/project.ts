@@ -11,6 +11,7 @@ import * as fs from 'node:fs';
 import path from 'node:path';
 import { getElizaCharacter } from '@/src/characters/eliza';
 import bookie from "@/src/agents/bookie"
+import professorOak from "@/src/agents/professor-oak";
 
 /**
  * Interface for a project module that can be loaded.
@@ -155,7 +156,7 @@ export async function loadProject(dir: string): Promise<Project> {
       };
 
       return {
-        agents: [defaultAgent, bookie],
+        agents: [defaultAgent, bookie, professorOak],
         dir,
       };
     }
