@@ -30,7 +30,7 @@ const action: Action = {
     'GET_KALSHI_FUNDS',
   ],
   description:
-    "Fetch the user's balance in Kalshi. Only run this action by itself. Only run this action by itself.",
+    "Fetch the user's balance in Kalshi. Only run this action by itself.",
   validate: async (_runtime: IAgentRuntime, message: Memory) => {
     logger.info('*** Validating GET_KALSHI_BALANCE action ***');
     const text = message.content.text ? message.content.text.toLowerCase() : '';

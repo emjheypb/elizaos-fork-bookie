@@ -1,5 +1,4 @@
-import type { Plugin } from '@elizaos/core';
-import { logger } from '@elizaos/core';
+import { logger, type Plugin } from '@elizaos/core';
 import { z } from 'zod';
 
 // import SampleService from './services/sample-service';
@@ -29,7 +28,7 @@ const configSchema = z.object({
 
 const plugin: Plugin = {
   name: 'kalshi',
-  description: 'A plugin that accessses the Kalshi API',
+  description: `Kalshi prediction market integration for elizaos agents - enables market discovery, portfolio management, and order execution via conversational AI.`,
   config: {
     EXAMPLE_PLUGIN_VARIABLE: process.env.EXAMPLE_PLUGIN_VARIABLE,
   },
