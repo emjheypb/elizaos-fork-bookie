@@ -8,7 +8,8 @@ const HeadersSchema = z.record(z.string(), z.string());
 // Type inference from schemas
 type Headers = z.infer<typeof HeadersSchema>;
 
-const keyPath = process.env.KALSHI_PRIVATE_KEY_PATH;
+const keyPath = process.env.KALSHI_PRIVATE_KEY_PATH || "./kalshi.key";
+const rawPrivateKey = process.env.KALSHI_PRIVATE_KEY;
 
 const loadPrivateKeyFromFile = (): crypto.KeyObject => {
   if (!fs.existsSync(keyPath)) {
@@ -17,7 +18,7 @@ const loadPrivateKeyFromFile = (): crypto.KeyObject => {
 
   const keyData: string = fs.readFileSync(keyPath, "utf8");
   const privateKey: crypto.KeyObject = crypto.createPrivateKey({
-    key: keyData,
+    key: rawPrivateKey ? rawPrivateKey.replace(/\\n/g, "\n") : keyData,
     format: "pem",
     // If your key is encrypted, you'd need to provide a passphrase here
     // passphrase: 'your-passphrase'
@@ -63,7 +64,7 @@ export const buildHeaders = (method: string, path: string) => {
   const sig: string = signPssText(privateKey, msgString);
 
   const headers: Headers = {
-    "KALSHI-ACCESS-KEY": process.env.KALSHI_API_KEY,
+    "KALSHI-ACCESS-KEY": process.env.KALSHI_API_KEY || "API_KEY",
     "KALSHI-ACCESS-SIGNATURE": sig,
     "KALSHI-ACCESS-TIMESTAMP": timestampStr,
     "Content-Type": "application/json",
