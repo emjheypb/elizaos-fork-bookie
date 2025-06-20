@@ -2,7 +2,7 @@ import type { Plugin } from '@elizaos/core';
 import { logger } from '@elizaos/core';
 import { z } from 'zod';
 
-import SampleService from './services/sample-service';
+// import SampleService from './services/sample-service';
 // import sampleProvider from "./providers/sample-provider";
 import getKalshiPortfolioBalance from './actions/kalshi/portfolio/get-balance';
 import getKalshiPortfolioOrders from './actions/kalshi/portfolio/get-orders';
