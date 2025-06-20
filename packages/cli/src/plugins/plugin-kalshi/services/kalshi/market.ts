@@ -1,18 +1,18 @@
 import { buildHeaders } from './base';
 import {
-  BalanceResponse,
-  BalanceResponseSchema,
-  OrdersResponse,
-  OrdersResponseSchema,
-} from '../../types/kalshi/portfolio';
+  MarketResponse,
+  MarketResponseSchema,
+  Market,
+  MarketSchema,
+} from '../../types/kalshi/market';
 import { ErrorResponseSchema } from '../../types/kalshi/base';
 
 const baseUrl: string = process.env.KALSHI_BASE_URL || 'https://demo-api.kalshi.co';
-const basePath = '/trade-api/v2/portfolio';
+const basePath = '/trade-api/v2/markets';
 
-export const getBalance = async (): Promise<BalanceResponse> => {
+export const getMarket = async (ticker: string): Promise<Market> => {
   const method: string = 'GET';
-  const path: string = basePath + '/balance';
+  const path: string = basePath + `/${ticker}`;
   const headers = buildHeaders(method, path);
 
   try {
@@ -40,8 +40,8 @@ export const getBalance = async (): Promise<BalanceResponse> => {
     }
 
     // Validate and parse successful response
-    const validatedResponse = BalanceResponseSchema.parse(responseData);
-    console.log('Balance Response:', validatedResponse);
+    const validatedResponse = MarketSchema.parse(responseData);
+    console.log('Market Response:', validatedResponse);
 
     return validatedResponse;
   } catch (error: any) {
@@ -62,13 +62,16 @@ export const getBalance = async (): Promise<BalanceResponse> => {
   }
 };
 
-export const getOrders = async (): Promise<OrdersResponse> => {
+export const getMarkets = async (tickers: string): Promise<MarketResponse> => {
   const method: string = 'GET';
-  const path: string = basePath + '/orders';
+  const path: string = basePath;
   const headers = buildHeaders(method, path);
+  const queryParams = new URLSearchParams({
+    tickers: tickers,
+  });
 
   try {
-    const response = await fetch(baseUrl + path, {
+    const response = await fetch(baseUrl + path + '?' + queryParams.toString(), {
       method,
       headers,
     });
@@ -92,8 +95,8 @@ export const getOrders = async (): Promise<OrdersResponse> => {
     }
 
     // Validate and parse successful response
-    const validatedResponse = OrdersResponseSchema.parse(responseData);
-    console.log('Orders Response:', validatedResponse);
+    const validatedResponse = MarketResponseSchema.parse(responseData);
+    console.log('Markets Response:', validatedResponse);
 
     return validatedResponse;
   } catch (error: any) {

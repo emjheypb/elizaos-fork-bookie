@@ -14,6 +14,7 @@ import {
   getRandomOpeningPhrase,
   getRandomRiskWarning,
 } from '../../utils';
+import { getMarkets } from '../../../services/kalshi/market';
 
 const action: Action = {
   name: 'GET_KALSHI_ORDERS',
@@ -29,8 +30,7 @@ const action: Action = {
     'GET_KALSHI_TRADES',
     'KALSHI_ORDER_STATUS',
   ],
-  description:
-    "Fetch the user's orders from Kalshi. Only run this action by itself. Only run this action by itself.",
+  description: "Fetch the user's orders from Kalshi. Run this action by itself",
   validate: async (_runtime: IAgentRuntime, message: Memory) => {
     logger.info('*** Validating GET_KALSHI_ORDERS action ***');
     const text = message.content.text ? message.content.text.toLowerCase() : '';
@@ -99,6 +99,8 @@ const action: Action = {
         }
         return true;
       }
+      const orderTickers = ordersResponse.orders.map((order) => order.ticker).join(',');
+      const marketsResponse = await getMarkets(orderTickers);
 
       logger.info('GET_KALSHI_ORDERS response:', ordersResponse);
 
@@ -131,18 +133,19 @@ const action: Action = {
         }
 
         // Add details about recent orders
-        const recentOrders = orders.slice(0, 3);
+        const recentOrders = orders.slice(0, 5);
         if (recentOrders.length > 0) {
-          responseText += 'Your most recent orders: ';
+          responseText += `Your ${recentOrders.length < 5 ? recentOrders.length : 10} most recent orders:\n`;
           recentOrders.forEach((order: any, index: number) => {
+            const market = marketsResponse.markets.find((market) => market.ticker === order.ticker);
             const price =
               order.side === 'yes'
                 ? `$${(order.yes_price / 100).toFixed(2)}`
                 : `$${(order.no_price / 100).toFixed(2)}`;
             const side = order.side === 'yes' ? 'YES' : 'NO';
             const status = order.status.toUpperCase();
-            const contracts = order.fill_count + order.remaining_count
-            responseText += `${index + 1}. ${contracts} ${side} contracts @ ${price} per contract (${status})${index < recentOrders.length - 1 ? ', ' : '. '}`;
+            const contracts = order.fill_count + order.remaining_count;
+            responseText += `${index + 1}. ${market ? `${market.title} ${market.subtitle}` : ''} - ${contracts} ${side} contracts @ ${price} per contract (${status})${index < orders.length - 1 ? ',\n' : '. '}`;
           });
         }
       }

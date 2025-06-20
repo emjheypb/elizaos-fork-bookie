@@ -13,7 +13,7 @@ export const OrderSchema = z.object({
   action: z.enum(['buy', 'sell']),
   client_order_id: z.string(),
   created_time: z.string().datetime(),
-  expiration_time: z.string().datetime(),
+  expiration_time: z.union([z.string().datetime(), z.null()]),
   fill_count: z.number().int(),
   initial_count: z.number().int(),
   last_update_time: z.string().datetime(),
