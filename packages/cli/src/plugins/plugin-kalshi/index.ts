@@ -6,6 +6,7 @@ import { z } from 'zod';
 // import sampleProvider from "./providers/sample-provider";
 import getKalshiPortfolioBalance from './actions/kalshi/portfolio/get-balance';
 import getKalshiPortfolioOrders from './actions/kalshi/portfolio/get-orders';
+import getKalshiMarkets from './actions/kalshi/market/get-markets';
 
 /**
  * Define the configuration schema for the plugin with the following properties:
@@ -51,7 +52,7 @@ const plugin: Plugin = {
     }
   },
   // services: [SampleService],
-  actions: [getKalshiPortfolioBalance, getKalshiPortfolioOrders],
+  actions: [getKalshiPortfolioBalance, getKalshiPortfolioOrders, getKalshiMarkets],
   // providers: [sampleProvider],
 };
 

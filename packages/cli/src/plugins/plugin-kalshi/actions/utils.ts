@@ -58,3 +58,22 @@ export const getRandomMarketInsight = () => {
   ];
   return insights[Math.floor(Math.random() * insights.length)];
 };
+
+export const commonWords = [
+  'find', 'show', 'get', 'check', 'what', 'whats', 'tell', 'me', 'see', 'look', 'at',
+  'display', 'list', 'view', 'search', 'for', 'kalshi', 'trades', 'trade', 'markets',
+  'market', 'bets', 'bet', 'betting', 'opportunities', 'wager', 'odds', 'available',
+  'the', 'a', 'an', 'and', 'or', 'but', 'in', 'on', 'at', 'to', 'of', 'with', 'by',
+  'from', 'up', 'about', 'into', 'through', 'during', 'before', 'after', 'above',
+  'below', 'between', 'among', 'is', 'are', 'was', 'were', 'be', 'been', 'being',
+  'have', 'has', 'had', 'do', 'does', 'did', 'will', 'would', 'could', 'should',
+  'may', 'might', 'must', 'can', 'any', 'some', 'all', 'no', 'not', 'only', 'own',
+  'other', 'such', 'than', 'too', 'very', 'just', 'now', 'here', 'there', 'where',
+  'how', 'why', 'when', 'who', 'which', 'what', 'that', 'this', 'these', 'those'
+];
+
+export const removeCommonWords = (text: string): string[] => {
+  return text.split(/\s+/).filter(
+    (word) => word.length > 2 && !commonWords.includes(word) && !/^\d+$/.test(word) // Remove pure numbers
+  );
+};

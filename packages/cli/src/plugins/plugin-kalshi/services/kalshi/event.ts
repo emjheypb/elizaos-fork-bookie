@@ -1,15 +1,10 @@
-import {
-  MarketResponse,
-  MarketResponseSchema,
-  Market,
-  MarketSchema,
-} from '../../types/kalshi/market';
+import { EventsResponse, EventsResponseSchema, Event, EventSchema } from '../../types/kalshi/event';
 import { ErrorResponseSchema } from '../../types/kalshi/base';
 
 const baseUrl: string = process.env.KALSHI_BASE_URL || 'https://demo-api.kalshi.co';
-const basePath = '/trade-api/v2/markets';
+const basePath = '/trade-api/v2/events';
 
-export const getMarket = async (ticker: string): Promise<Market> => {
+export const getEvent = async (ticker: string): Promise<Event> => {
   const method: string = 'GET';
   const path: string = basePath + `/${ticker}`;
 
@@ -37,8 +32,8 @@ export const getMarket = async (ticker: string): Promise<Market> => {
     }
 
     // Validate and parse successful response
-    const validatedResponse = MarketSchema.parse(responseData);
-    console.log('Market Response:', validatedResponse);
+    const validatedResponse = EventSchema.parse(responseData);
+    console.log('Event Response:', validatedResponse);
 
     return validatedResponse;
   } catch (error: any) {
@@ -59,11 +54,13 @@ export const getMarket = async (ticker: string): Promise<Market> => {
   }
 };
 
-export const getMarkets = async (tickers: string): Promise<MarketResponse> => {
+export const getEvents = async (ticker?: string, status?: string): Promise<EventsResponse> => {
   const method: string = 'GET';
   const path: string = basePath;
   const queryParams = new URLSearchParams({
-    tickers: tickers,
+    with_nested_markets: 'true',
+    status: status || 'open',
+    series_ticker: ticker || '',
   });
 
   try {
@@ -71,7 +68,7 @@ export const getMarkets = async (tickers: string): Promise<MarketResponse> => {
       method,
     });
 
-    console.log('Status Code:', response.status);
+    // console.log('Status Code:', response.status);
 
     const responseData = await response.json();
 
@@ -90,8 +87,12 @@ export const getMarkets = async (tickers: string): Promise<MarketResponse> => {
     }
 
     // Validate and parse successful response
-    const validatedResponse = MarketResponseSchema.parse(responseData);
-    console.log('Markets Count:', validatedResponse.markets.length);
+    const validatedResponse = EventsResponseSchema.parse(responseData);
+    // if (validatedResponse.events.length > 0)
+    //   console.log(
+    //     'Events:',
+    //     validatedResponse.events.map((event) => event.event_ticker)
+    //   );
 
     return validatedResponse;
   } catch (error: any) {
