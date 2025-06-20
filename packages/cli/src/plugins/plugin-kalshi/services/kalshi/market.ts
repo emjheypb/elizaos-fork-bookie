@@ -1,4 +1,3 @@
-import { buildHeaders } from './base';
 import {
   MarketResponse,
   MarketResponseSchema,
@@ -13,12 +12,10 @@ const basePath = '/trade-api/v2/markets';
 export const getMarket = async (ticker: string): Promise<Market> => {
   const method: string = 'GET';
   const path: string = basePath + `/${ticker}`;
-  const headers = buildHeaders(method, path);
 
   try {
     const response = await fetch(baseUrl + path, {
       method,
-      headers,
     });
 
     console.log('Status Code:', response.status);
@@ -65,7 +62,6 @@ export const getMarket = async (ticker: string): Promise<Market> => {
 export const getMarkets = async (tickers: string): Promise<MarketResponse> => {
   const method: string = 'GET';
   const path: string = basePath;
-  const headers = buildHeaders(method, path);
   const queryParams = new URLSearchParams({
     tickers: tickers,
   });
@@ -73,7 +69,6 @@ export const getMarkets = async (tickers: string): Promise<MarketResponse> => {
   try {
     const response = await fetch(baseUrl + path + '?' + queryParams.toString(), {
       method,
-      headers,
     });
 
     console.log('Status Code:', response.status);
