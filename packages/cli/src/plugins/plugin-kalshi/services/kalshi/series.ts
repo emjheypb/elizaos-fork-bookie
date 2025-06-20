@@ -1,15 +1,15 @@
 import {
-  MarketResponse,
-  MarketResponseSchema,
-  Market,
-  MarketSchema,
-} from '../../types/kalshi/market';
+  SeriesResponse,
+  SeriesResponseSchema,
+  Series,
+  SeriesSchema,
+} from '../../types/kalshi/series';
 import { ErrorResponseSchema } from '../../types/kalshi/base';
 
 const baseUrl: string = process.env.KALSHI_BASE_URL || 'https://demo-api.kalshi.co';
-const basePath = '/trade-api/v2/markets';
+const basePath = '/trade-api/v2/series';
 
-export const getMarket = async (ticker: string): Promise<Market> => {
+export const getSeries = async (ticker: string): Promise<Series> => {
   const method: string = 'GET';
   const path: string = basePath + `/${ticker}`;
 
@@ -18,7 +18,7 @@ export const getMarket = async (ticker: string): Promise<Market> => {
       method,
     });
 
-    console.log('Status Code:', response.status);
+    // console.log('Status Code:', response.status);
 
     const responseData = await response.json();
 
@@ -37,8 +37,8 @@ export const getMarket = async (ticker: string): Promise<Market> => {
     }
 
     // Validate and parse successful response
-    const validatedResponse = MarketSchema.parse(responseData);
-    console.log('Market Response:', validatedResponse);
+    const validatedResponse = SeriesSchema.parse(responseData);
+    console.log('Series Response:', validatedResponse);
 
     return validatedResponse;
   } catch (error: any) {
@@ -59,11 +59,11 @@ export const getMarket = async (ticker: string): Promise<Market> => {
   }
 };
 
-export const getMarkets = async (tickers: string): Promise<MarketResponse> => {
+export const getSeriesList = async (category?: string): Promise<SeriesResponse> => {
   const method: string = 'GET';
   const path: string = basePath;
   const queryParams = new URLSearchParams({
-    tickers: tickers,
+    category: category || '',
   });
 
   try {
@@ -90,8 +90,8 @@ export const getMarkets = async (tickers: string): Promise<MarketResponse> => {
     }
 
     // Validate and parse successful response
-    const validatedResponse = MarketResponseSchema.parse(responseData);
-    console.log('Markets Count:', validatedResponse.markets.length);
+    const validatedResponse = SeriesResponseSchema.parse(responseData);
+    console.log('Series Count:', validatedResponse.series.length);
 
     return validatedResponse;
   } catch (error: any) {
