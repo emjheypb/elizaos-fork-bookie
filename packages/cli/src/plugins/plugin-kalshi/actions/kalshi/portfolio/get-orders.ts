@@ -22,12 +22,9 @@ const action: Action = {
     'KALSHI_ORDERS',
     'KALSHI_ORDER_HISTORY',
     'CHECK_KALSHI_ORDERS',
-    'KALSHI_TRADES',
     'KALSHI_POSITIONS',
-    'KALSHI_BETS',
     'SHOW_KALSHI_ORDERS',
     'KALSHI_PORTFOLIO_ORDERS',
-    'GET_KALSHI_TRADES',
     'KALSHI_ORDER_STATUS',
   ],
   description: "Fetch the user's orders from Kalshi. Run this action by itself",
@@ -39,19 +36,10 @@ const action: Action = {
     const orderKeywords = [
       'orders',
       'order',
-      'trades',
-      'trade',
       'positions',
       'position',
-      'bets',
-      'bet',
       'portfolio',
       'history',
-      'status',
-      'active',
-      'pending',
-      'filled',
-      'executed',
     ];
 
     const actionKeywords = [
