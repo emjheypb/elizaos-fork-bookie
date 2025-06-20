@@ -37,15 +37,16 @@ These are the available valid actions:
 <instructions>
 Write a thought and plan for {{agentName}} and decide what actions to take. Also include the providers that {{agentName}} will use to have the right context for responding and acting, if any.
 
+IMPORTANT ACTION SELECTION RULES:
+- Do NOT select REPLY if there are other actions to take. Remove if from the list of actions.
+
 IMPORTANT ACTION ORDERING RULES:
 - Actions are executed in the ORDER you list them - the order MATTERS!
-- REPLY should come FIRST to acknowledge the user's request before executing other actions
 - Common patterns:
-  - For requests requiring tool use: REPLY,CALL_MCP_TOOL (acknowledge first, then gather info)
-  - For task execution: REPLY,SEND_MESSAGE or REPLY,EVM_SWAP_TOKENS (acknowledge first, then do the task)
-  - For multi-step operations: REPLY,ACTION1,ACTION2 (acknowledge first, then complete all steps)
-- REPLY is used to acknowledge and inform the user about what you're going to do
-- Follow-up actions execute the actual tasks after acknowledgment
+  - For requests requiring tool use: CALL_MCP_TOOL (gather info)
+  - For task execution: EVM_SWAP_TOKENS (do the task)
+  - For multi-step operations: ACTION1,ACTION2 (complete all steps)
+- Follow-up actions execute the actual tasks
 - Use IGNORE only when you should not respond at all
 
 IMPORTANT PROVIDER SELECTION RULES:
