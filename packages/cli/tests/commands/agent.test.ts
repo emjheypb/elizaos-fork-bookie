@@ -43,6 +43,7 @@ describe('ElizaOS Agent Commands', () => {
     await mkdir(join(testTmpDir, 'elizadb'), { recursive: true });
 
     // Start the ElizaOS server with a default character
+    // Start the ElizaOS server with a default character
     console.log(`[DEBUG] Starting ElizaOS server on port ${testServerPort}`);
     // Use resolved path for CLI
     const cliPath = join(__dirname, '../../dist/index.js');
@@ -221,6 +222,7 @@ describe('ElizaOS Agent Commands', () => {
           `${elizaosCmd} agent start --remote-url ${testServerUrl} --path ${characterPath}`,
           {
             stdio: 'pipe',
+            timeout: 30000, // 30 second timeout for loading each character
             timeout: 30000, // 30 second timeout for loading each character
           }
         );

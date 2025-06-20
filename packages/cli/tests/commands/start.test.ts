@@ -117,6 +117,8 @@ describe('ElizaOS Start Commands', () => {
       try {
         // Wait longer for agent to fully register - CI environments may be slower
         await new Promise((resolve) => setTimeout(resolve, TEST_TIMEOUTS.MEDIUM_WAIT));
+        // Wait longer for agent to fully register - CI environments may be slower
+        await new Promise((resolve) => setTimeout(resolve, TEST_TIMEOUTS.MEDIUM_WAIT));
 
         // Retry logic for CI environments where agent registration might be delayed
         // GitHub Actions and other CI runners may have slower process startup times
