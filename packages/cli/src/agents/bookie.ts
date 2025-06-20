@@ -1,4 +1,10 @@
-import { logger, type IAgentRuntime, type ProjectAgent, type Character, messageHandlerTemplate } from '@elizaos/core';
+import {
+  logger,
+  type IAgentRuntime,
+  type ProjectAgent,
+  type Character,
+  messageHandlerTemplate,
+} from '@elizaos/core';
 import kalshiPlugin from '../plugins/plugin-kalshi';
 
 export const character: Character = {
@@ -7,6 +13,7 @@ export const character: Character = {
     '@elizaos/plugin-sql',
     ...(process.env.OPENAI_API_KEY ? ['@elizaos/plugin-openai'] : []),
     ...(process.env.ANTHROPIC_API_KEY ? ['@elizaos/plugin-anthropic'] : []),
+    ...(process.env.TELEGRAM_BOT_TOKEN ? ['@elizaos/plugin-telegram'] : []),
     ...(!process.env.IGNORE_BOOTSTRAP ? ['@elizaos/plugin-bootstrap'] : []),
   ],
   settings: {
@@ -126,7 +133,7 @@ export const character: Character = {
   },
 };
 
-const initCharacter = ({ runtime }: { runtime: IAgentRuntime }) => {
+const initCharacter = ({}: { runtime: IAgentRuntime }) => {
   logger.info('Initializing Bookie character');
   logger.info('Name: ', character.name);
   logger.info('Checking platform credentials...');

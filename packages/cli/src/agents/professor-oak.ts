@@ -6,9 +6,9 @@ export const character: Character = {
   name: 'Professor Oak',
   plugins: [
     '@elizaos/plugin-sql',
-    // ...(process.env.ANTHROPIC_API_KEY ? ["@elizaos/plugin-anthropic"] : []),
     ...(process.env.OPENAI_API_KEY ? ['@elizaos/plugin-openai'] : []),
-    // ...(!process.env.OPENAI_API_KEY ? ["@elizaos/plugin-local-ai"] : []),
+    ...(process.env.ANTHROPIC_API_KEY ? ['@elizaos/plugin-anthropic'] : []),
+    ...(process.env.TELEGRAM_BOT_TOKEN ? ['@elizaos/plugin-telegram'] : []),
     ...(!process.env.IGNORE_BOOTSTRAP ? ['@elizaos/plugin-bootstrap'] : []),
   ],
   settings: {
