@@ -570,10 +570,10 @@ export class MessageBusService extends Service {
     try {
       const room = await this.runtime.getRoom(agentRoomId);
       const world = await this.runtime.getWorld(agentWorldId);
-  
+
       const channelId = room?.channelId as UUID;
       const serverId = world?.serverId as UUID;
-  
+
       if (!channelId || !serverId) {
         logger.error(
           `[${this.runtime.character.name}] MessageBusService: Cannot map agent room/world to central IDs for response. AgentRoomID: ${agentRoomId}, AgentWorldID: ${agentWorldId}. Room or World object missing, or channelId/serverId not found on them.`
@@ -602,7 +602,7 @@ export class MessageBusService extends Service {
           centralInReplyToRootMessageId = originalAgentMemory.metadata.sourceId as UUID;
         }
       }
-  
+
       const payloadToServer = {
         channel_id: channelId,
         server_id: serverId,
@@ -625,7 +625,7 @@ export class MessageBusService extends Service {
             (originalMessage?.metadata?.channelType || room?.type) === ChannelType.DM,
         },
       };
-  
+
       logger.info(
         `[${this.runtime.character.name}] MessageBusService: Sending payload to central server API endpoint (/api/messaging/submit):`,
         payloadToServer
@@ -641,7 +641,7 @@ export class MessageBusService extends Service {
         headers: this.getAuthHeaders(),
         body: JSON.stringify(payloadToServer),
       });
-  
+
       if (!response.ok) {
         logger.error(
           `[${this.runtime.character.name}] MessageBusService: Error sending response to central server: ${response.status} ${await response.text()}`
@@ -654,11 +654,10 @@ export class MessageBusService extends Service {
       );
     }
   }
-  
 
   private async notifyMessageComplete(channelId?: UUID, serverId?: UUID) {
     if (!channelId || !serverId) return;
-  
+
     try {
       const completeUrl = new URL('/api/messaging/complete', this.getCentralMessageServerUrl());
       await fetch(completeUrl.toString(), {
@@ -667,7 +666,10 @@ export class MessageBusService extends Service {
         body: JSON.stringify({ channel_id: channelId, server_id: serverId }),
       });
     } catch (error) {
-      logger.warn(`[${this.runtime.character.name}] MessageBusService: Failed to notify completion`, error);
+      logger.warn(
+        `[${this.runtime.character.name}] MessageBusService: Failed to notify completion`,
+        error
+      );
     }
   }
 

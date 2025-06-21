@@ -1291,7 +1291,7 @@ export abstract class BaseDrizzleAdapter extends DatabaseAdapter<any> {
     if (value === null || value === undefined) {
       return value;
     }
-  
+
     if (typeof value === 'string') {
       // Handle multiple cases that can cause PostgreSQL/PgLite JSON parsing errors:
       // 1. Remove null bytes (U+0000) which are not allowed in PostgreSQL text fields
@@ -1302,7 +1302,7 @@ export abstract class BaseDrizzleAdapter extends DatabaseAdapter<any> {
         .replace(/\\(?!["\\/bfnrtu])/g, '\\\\') // Escape single backslashes not part of valid escape sequences
         .replace(/\\u(?![0-9a-fA-F]{4})/g, '\\\\u'); // Fix malformed Unicode escape sequences
     }
-  
+
     if (typeof value === 'object') {
       if (seen.has(value as object)) {
         return null;
@@ -1325,7 +1325,7 @@ export abstract class BaseDrizzleAdapter extends DatabaseAdapter<any> {
         return result;
       }
     }
-  
+
     return value;
   }
 
