@@ -10,6 +10,8 @@ import { stringToUuid } from '@elizaos/core';
 import * as fs from 'node:fs';
 import path from 'node:path';
 import { getElizaCharacter } from '@/src/characters/eliza';
+import professorOak from '@/src/agents/professor-oak';
+import bookie from '@/src/agents/bookie';
 
 /**
  * Interface for a project module that can be loaded.
@@ -140,21 +142,21 @@ export async function loadProject(dir: string): Promise<Project> {
 
       // Create a fallback project with the default Eliza character
       // Use deterministic UUID based on character name to match runtime behavior
-      const defaultCharacterName = 'Eliza (Default)';
-      const elizaCharacter = getElizaCharacter(); // Get the filtered character based on env vars
-      const defaultAgent: ProjectAgent = {
-        character: {
-          ...elizaCharacter,
-          id: stringToUuid(defaultCharacterName) as UUID,
-          name: defaultCharacterName,
-        },
-        init: async () => {
-          logger.info('Initializing default Eliza character');
-        },
-      };
+      // const defaultCharacterName = 'Eliza (Default)';
+      // const elizaCharacter = getElizaCharacter(); // Get the filtered character based on env vars
+      // const defaultAgent: ProjectAgent = {
+      //   character: {
+      //     ...elizaCharacter,
+      //     id: stringToUuid(defaultCharacterName) as UUID,
+      //     name: defaultCharacterName,
+      //   },
+      //   init: async () => {
+      //     logger.info('Initializing default Eliza character');
+      //   },
+      // };
 
       return {
-        agents: [defaultAgent],
+        agents: [professorOak, bookie], // Include default agents
         dir,
       };
     }
