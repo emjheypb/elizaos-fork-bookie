@@ -597,8 +597,10 @@ export class MessageBusService extends Service {
       // Resolve reply-to message ID from agent memory metadata
       let centralInReplyToRootMessageId: UUID | undefined = undefined;
       if (inReplyToAgentMemoryId) {
-        const memory = await this.runtime.getMemoryById(inReplyToAgentMemoryId);
-        centralInReplyToRootMessageId = memory?.metadata?.sourceId as UUID;
+        const originalAgentMemory = await this.runtime.getMemoryById(inReplyToAgentMemoryId);
+        if (originalAgentMemory?.metadata?.sourceId) {
+          centralInReplyToRootMessageId = originalAgentMemory.metadata.sourceId as UUID;
+        }
       }
   
       const payloadToServer = {
@@ -624,8 +626,11 @@ export class MessageBusService extends Service {
         },
       };
   
-      logger.info(`[${this.runtime.character.name}] MessageBusService: Sending message to central server`, payloadToServer);
-  
+      logger.info(
+        `[${this.runtime.character.name}] MessageBusService: Sending payload to central server API endpoint (/api/messaging/submit):`,
+        payloadToServer
+      );
+
       const submitUrl = new URL('/api/messaging/submit', this.getCentralMessageServerUrl());
       const response = await fetch(submitUrl.toString(), {
         method: 'POST',
