@@ -69,11 +69,25 @@ export const commonWords = [
   'have', 'has', 'had', 'do', 'does', 'did', 'will', 'would', 'could', 'should',
   'may', 'might', 'must', 'can', 'any', 'some', 'all', 'no', 'not', 'only', 'own',
   'other', 'such', 'than', 'too', 'very', 'just', 'now', 'here', 'there', 'where',
-  'how', 'why', 'when', 'who', 'which', 'what', 'that', 'this', 'these', 'those'
+  'how', 'why', 'when', 'who', 'which', 'what', 'that', 'this', 'these', 'those',
 ];
+
+export const symbols = [
+  '?', '!', '.', ',', ';', ':', '-', '_', '=', '+', '*', '/', '\\', '|', '~', '`',
+  '"', "'", '(', ')', '[', ']', '{', '}', '@', '#', '$', '%', '^', '&', '>', '<',
+]
+
+export const marketCategories = [
+  'politics', 'sports', 'crypto', 'economics', 'mentions', 'companies', 'financials',
+  'science and technology', 'health', 'world',
+]
 
 export const removeCommonWords = (text: string): string[] => {
   return text.split(/\s+/).filter(
     (word) => word.length > 2 && !commonWords.includes(word) && !/^\d+$/.test(word) // Remove pure numbers
   );
 };
+
+export const removeSymbols = (text: string): string => {
+  return text.split('').filter(char => !symbols.includes(char)).join('');
+}

@@ -12,7 +12,9 @@ import {
   getRandomMarketInsight,
   getRandomOpeningPhrase,
   getRandomRiskWarning,
+  marketCategories,
   removeCommonWords,
+  removeSymbols,
 } from '../../utils';
 import { getEvents } from '../../../services/kalshi/event';
 import { Event } from '../../../types/kalshi/event';
@@ -102,9 +104,9 @@ const action: Action = {
       const text = message.content.text ? message.content.text.toLowerCase() : '';
 
       // Extract meaningful words from user input
-      const words = removeCommonWords(text);
+      const words = removeCommonWords(removeSymbols(text));
       if (words.length === 0) {
-        words.push('sports');
+        words.push(marketCategories[Math.floor(Math.random() * marketCategories.length)]);
         // logger.error('GET_KALSHI_TRADES No meaningful words found in user input');
         // if (callback) {
         //   await callback({
