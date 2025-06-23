@@ -73,12 +73,13 @@ const action: Action = {
     const hasMarketKeyword = marketKeywords.some((keyword) => text.includes(keyword));
     const hasActionKeyword = actionKeywords.some((keyword) => text.includes(keyword));
     const mentionsKalshi = text.includes('kalshi');
+    const mentionsTelegramCommand = text.includes('kalshi_gettrades')
 
     // Validate if user is looking for trading opportunities
     const isKalshiMarketRequest = mentionsKalshi && hasMarketKeyword;
     const isGeneralMarketSearch = hasMarketKeyword && hasActionKeyword;
 
-    return (isKalshiMarketRequest || isGeneralMarketSearch) && text.length > 3;
+    return (isKalshiMarketRequest || isGeneralMarketSearch || mentionsTelegramCommand) && text.length > 3;
   },
   handler: async (
     _runtime: IAgentRuntime,
@@ -105,6 +106,7 @@ const action: Action = {
 
       // Extract meaningful words from user input
       const words = removeCommonWords(removeSymbols(text));
+      if (words.indexOf('kalshigettrades') >= 0) words.splice(words.indexOf('kalshigettrades'), 1)
       if (words.length === 0) {
         words.push(marketCategories[Math.floor(Math.random() * marketCategories.length)]);
         // logger.error('GET_KALSHI_TRADES No meaningful words found in user input');
@@ -162,15 +164,7 @@ const action: Action = {
       for (const series of filteredSeries) {
         const event = await getEvents(series.ticker);
         if (!event || !event.events || event.events.length === 0) {
-          logger.error(`No events found for series: ${series.title} (${series.ticker})`);
-          continue;
-        }
-        if (
-          !event.events[0].markets ||
-          event.events[0].markets.length === 0 ||
-          !event.events[0].markets.find((market) => market.yes_bid > 0 && market.no_bid > 0)
-        ) {
-          logger.error(`No markets found for series: ${series.title} (${series.ticker})`);
+          // logger.error(`No events found for series: ${series.title} (${series.ticker})`);
           continue;
         }
 
@@ -180,7 +174,7 @@ const action: Action = {
             e.markets.length === 0 ||
             !e.markets.find((market) => market.yes_bid > 0 && market.no_bid > 0)
           ) {
-            logger.error(`No valid markets found for event: ${e.title} (${e.event_ticker})`);
+            // logger.error(`No valid markets found for event: ${e.title} (${e.event_ticker})`);
             return;
           }
 
@@ -211,7 +205,7 @@ const action: Action = {
 
       topEvents.forEach((event, index: number) => {
         if (!event || !event.markets) return; // Skip if no event found for this series
-        responseText += `${index + 1}. ${event.title}\n`;
+        responseText += `\n${index + 1}. ${event.title}\n`;
 
         event.markets.forEach((market) => {
           const yesPrice = market.yes_ask ? `${(market.yes_ask / 100).toFixed(2)}` : 'N/A';

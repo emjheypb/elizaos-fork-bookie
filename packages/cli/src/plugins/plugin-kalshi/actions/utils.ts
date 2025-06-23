@@ -78,7 +78,7 @@ export const symbols = [
 ]
 
 export const marketCategories = [
-  'politics', 'sports', 'crypto', 'economics', 'mentions', 'companies', 'financials',
+  'politics', 'sports', 'crypto', 'economics', 'mention', 'companies', 'financials',
   'science and technology', 'health', 'world',
 ]
 

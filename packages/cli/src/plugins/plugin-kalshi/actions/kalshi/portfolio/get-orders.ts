@@ -59,13 +59,14 @@ const action: Action = {
     const hasOrderKeyword = orderKeywords.some((keyword) => text.includes(keyword));
     const hasActionKeyword = actionKeywords.some((keyword) => text.includes(keyword));
     const mentionsKalshi = text.includes('kalshi');
+    const mentionsTelegramCommand = text.includes('kalshi_myorders')
 
     // More flexible validation - either explicit mention of Kalshi + order terms
     // OR order inquiry in trading context
     const isKalshiOrderRequest = mentionsKalshi && hasOrderKeyword;
     const isGeneralOrderInTradingContext = hasOrderKeyword && hasActionKeyword;
 
-    return (isKalshiOrderRequest || isGeneralOrderInTradingContext) && text.length > 3;
+    return (isKalshiOrderRequest || isGeneralOrderInTradingContext || mentionsTelegramCommand) && text.length > 3;
   },
   handler: async (
     _runtime: IAgentRuntime,

@@ -65,13 +65,14 @@ const action: Action = {
     const hasBalanceKeyword = balanceKeywords.some((keyword) => text.includes(keyword));
     const hasActionKeyword = actionKeywords.some((keyword) => text.includes(keyword));
     const mentionsKalshi = text.includes('kalshi');
+    const mentionsTelegramCommand = text.includes('kalshi_mybalance')
 
     // More flexible validation - either explicit mention of Kalshi + balance terms
     // OR balance inquiry in trading context
     const isKalshiBalanceRequest = mentionsKalshi && hasBalanceKeyword;
     const isGeneralBalanceInTradingContext = hasBalanceKeyword && hasActionKeyword;
 
-    return (isKalshiBalanceRequest || isGeneralBalanceInTradingContext) && text.length > 3;
+    return (isKalshiBalanceRequest || isGeneralBalanceInTradingContext || mentionsTelegramCommand) && text.length > 3;
   },
   handler: async (
     _runtime: IAgentRuntime,
