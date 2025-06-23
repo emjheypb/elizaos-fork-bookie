@@ -133,8 +133,20 @@ const action: Action = {
               .toLowerCase()
               .split(/\s+/)
               .some((word) => words.includes(word))
-          )
+          ) ||
+          words.includes(series.ticker.toLowerCase())
       );
+      filteredSeries.sort((a, b) => {
+        if (words.includes(a.ticker.toLowerCase())) {
+          return -1; // 'a' (the specific value) comes first
+        } else if (words.includes(b.ticker.toLowerCase())) {
+          return 1; // 'b' (the specific value) comes first
+        } else {
+          // For other elements, maintain their original relative order or sort alphabetically/numerically
+          return a.title.localeCompare(b.title); // Example: sort remaining alphabetically
+        }
+      });
+
       if (filteredSeries.length === 0) {
         logger.error('GET_KALSHI_TRADES No Filtered Series found for words:', words);
         if (callback) {
@@ -162,8 +174,19 @@ const action: Action = {
           continue;
         }
 
-        events.push(event.events[0]);
-        console.log(`Event Added: ${event.events[0].event_ticker}`);
+        event.events.forEach((e) => {
+          if (
+            !e.markets ||
+            e.markets.length === 0 ||
+            !e.markets.find((market) => market.yes_bid > 0 && market.no_bid > 0)
+          ) {
+            logger.error(`No valid markets found for event: ${e.title} (${e.event_ticker})`);
+            return;
+          }
+
+          events.push(e);
+          console.log(`Series ${series.ticker} Event Added: ${event.events[0].event_ticker}`);
+        });
       }
       logger.info(`GET_KALSHI_TRADES Events count: ${events.length}`);
       if (events.length === 0) {
