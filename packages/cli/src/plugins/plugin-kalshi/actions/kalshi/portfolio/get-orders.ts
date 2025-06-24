@@ -25,6 +25,7 @@ const action: Action = {
     'SHOW_KALSHI_ORDERS',
     'KALSHI_PORTFOLIO_ORDERS',
     'KALSHI_ORDER_STATUS',
+    'KALSHI_MYORDERS'
   ],
   description: "Fetch the user's orders from Kalshi. Run this action by itself",
   validate: async (_runtime: IAgentRuntime, message: Memory) => {

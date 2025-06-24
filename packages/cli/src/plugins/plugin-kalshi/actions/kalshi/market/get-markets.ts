@@ -33,6 +33,7 @@ const action: Action = {
     'GET_KALSHI_BETS',
     'KALSHI_TRADING_OPPORTUNITIES',
     'AVAILABLE_TRADES',
+    'KALSHI_GETTRADES'
   ],
   description:
     'Find available Kalshi markets to trade based on categories or tags. Run this action by itself',

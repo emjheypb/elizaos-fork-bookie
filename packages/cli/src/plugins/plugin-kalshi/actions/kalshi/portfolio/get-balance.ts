@@ -27,6 +27,7 @@ const action: Action = {
     'SHOW_KALSHI_BALANCE',
     'KALSHI_PORTFOLIO_BALANCE',
     'GET_KALSHI_FUNDS',
+    'KALSHI_MYBALANCE'
   ],
   description:
     "Fetch the user's balance in Kalshi. Only run this action by itself.",
