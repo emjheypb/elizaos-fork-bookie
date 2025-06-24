@@ -10,6 +10,7 @@ import { stringToUuid } from '@elizaos/core';
 import * as fs from 'node:fs';
 import path from 'node:path';
 import { getElizaCharacter } from '@/src/characters/eliza';
+import { detectDirectoryType } from '@/src/utils/directory-detection';
 import professorOak from '@/src/agents/professor-oak';
 import bookie from '@/src/agents/bookie';
 
@@ -134,6 +135,12 @@ function extractPlugin(module: any): Plugin {
  */
 export async function loadProject(dir: string): Promise<Project> {
   try {
+    // Validate directory structure using centralized detection
+    const dirInfo = detectDirectoryType(dir);
+    if (!dirInfo.hasPackageJson) {
+      throw new Error(`No package.json found in ${dir}`);
+    }
+
     // TODO: Get the package.json and get the main field
     const packageJson = JSON.parse(fs.readFileSync(path.join(dir, 'package.json'), 'utf8'));
     const main = packageJson.main;
