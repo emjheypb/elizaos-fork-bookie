@@ -1,6 +1,6 @@
 import CharacterForm from '@/components/character-form';
 import { useToast } from '@/hooks/use-toast';
-import { apiClient } from '@/lib/api';
+import { createElizaClient } from '@/lib/api-client-config';
 import type { Agent } from '@elizaos/core';
 import { useQueryClient } from '@tanstack/react-query';
 import { useState, useRef } from 'react';
@@ -68,9 +68,8 @@ export default function AgentCreator() {
         };
       }
 
-      await apiClient.createAgent({
-        characterJson: completeCharacter,
-      });
+      const elizaClient = createElizaClient();
+      await elizaClient.agents.createAgent({ agent: completeCharacter });
 
       // Invalidate the characters query to refresh the characters list
       queryClient.invalidateQueries({ queryKey: ['characters'] });

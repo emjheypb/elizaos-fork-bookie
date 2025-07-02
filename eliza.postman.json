@@ -2,7 +2,7 @@
   "info": {
     "name": "Eliza AI Framework API Collection",
     "description": "Complete Postman collection for the Eliza AI Framework REST API endpoints. Updated to match actual API implementation.",
-    "version": "1.0.12",
+    "version": "1.0.15",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "variable": [
@@ -63,6 +63,12 @@
       "key": "messageId",
       "value": "",
       "description": "Message ID for message-specific endpoints",
+      "type": "string"
+    },
+    {
+      "key": "userId",
+      "value": "",
+      "description": "User ID for user-specific operations and message authoring",
       "type": "string"
     }
   ],
@@ -527,7 +533,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"message\": \"Hello from API\",\n  \"agentId\": \"{{agentId}}\",\n  \"roomId\": \"{{roomId}}\"\n}"
+              "raw": "{\n  \"channel_id\": \"{{channelId}}\",\n  \"server_id\": \"00000000-0000-0000-0000-000000000000\",\n  \"author_id\": \"{{userId}}\",\n  \"content\": \"Hello from API\",\n  \"source_type\": \"user_message\",\n  \"raw_message\": {\n    \"text\": \"Hello from API\"\n  },\n  \"metadata\": {\n    \"platform\": \"api\"\n  }\n}"
             },
             "url": {
               "raw": "{{baseUrl}}/api/messaging/submit",

@@ -1,16 +1,16 @@
 {
   "name": "@elizaos/core",
-  "version": "1.0.12",
+  "version": "1.0.15",
   "description": "",
   "type": "module",
   "main": "dist/index.js",
   "module": "dist/index.js",
   "types": "dist/index.d.ts",
-  "bun": "./src/index.ts",
+  "bun": "./dist/index.js",
   "exports": {
     "./package.json": "./package.json",
     ".": {
-      "bun": "./src/index.ts",
+      "bun": "./dist/index.js",
       "import": {
         "types": "./dist/index.d.ts",
         "default": "./dist/index.js"
