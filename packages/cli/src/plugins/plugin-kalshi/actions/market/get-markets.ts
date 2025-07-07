@@ -16,9 +16,10 @@ import {
   removeCommonWords,
   removeSymbols,
 } from '../utils';
-import { getEvents } from '../../../services/kalshi/event';
-import { Event } from '../../types/kalshi/event';
-import { getSeriesList } from '../../../services/kalshi/series';
+import { getEvents } from '../../services/event';
+import { Event } from '../../types/event';
+import { getSeriesList } from '../../services/series';
+import { Market } from '../../types/market';
 
 const action: Action = {
   name: 'GET_KALSHI_TRADES',
@@ -33,7 +34,7 @@ const action: Action = {
     'GET_KALSHI_BETS',
     'KALSHI_TRADING_OPPORTUNITIES',
     'AVAILABLE_TRADES',
-    'KALSHI_GETTRADES'
+    'KALSHI_GETTRADES',
   ],
   description:
     'Find available Kalshi markets to trade based on categories or tags. Run this action by itself',
@@ -74,13 +75,15 @@ const action: Action = {
     const hasMarketKeyword = marketKeywords.some((keyword) => text.includes(keyword));
     const hasActionKeyword = actionKeywords.some((keyword) => text.includes(keyword));
     const mentionsKalshi = text.includes('kalshi');
-    const mentionsTelegramCommand = text.includes('kalshi_gettrades')
+    const mentionsTelegramCommand = text.includes('kalshi_gettrades');
 
     // Validate if user is looking for trading opportunities
     const isKalshiMarketRequest = mentionsKalshi && hasMarketKeyword;
     const isGeneralMarketSearch = hasMarketKeyword && hasActionKeyword;
 
-    return (isKalshiMarketRequest || isGeneralMarketSearch || mentionsTelegramCommand) && text.length > 3;
+    return (
+      (isKalshiMarketRequest || isGeneralMarketSearch || mentionsTelegramCommand) && text.length > 3
+    );
   },
   handler: async (
     _runtime: IAgentRuntime,
@@ -107,7 +110,7 @@ const action: Action = {
 
       // Extract meaningful words from user input
       const words = removeCommonWords(removeSymbols(text));
-      if (words.indexOf('kalshigettrades') >= 0) words.splice(words.indexOf('kalshigettrades'), 1)
+      if (words.indexOf('kalshigettrades') >= 0) words.splice(words.indexOf('kalshigettrades'), 1);
       if (words.length === 0) {
         words.push(marketCategories[Math.floor(Math.random() * marketCategories.length)]);
         // logger.error('GET_KALSHI_TRADES No meaningful words found in user input');
@@ -169,11 +172,11 @@ const action: Action = {
           continue;
         }
 
-        event.events.forEach((e) => {
+        event.events.forEach((e: Event) => {
           if (
             !e.markets ||
             e.markets.length === 0 ||
-            !e.markets.find((market) => market.yes_bid > 0 && market.no_bid > 0)
+            !e.markets.find((market: Market) => market.yes_bid > 0 && market.no_bid > 0)
           ) {
             // logger.error(`No valid markets found for event: ${e.title} (${e.event_ticker})`);
             return;

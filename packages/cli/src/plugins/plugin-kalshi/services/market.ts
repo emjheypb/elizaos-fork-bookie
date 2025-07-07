@@ -1,10 +1,5 @@
-import {
-  MarketResponse,
-  MarketResponseSchema,
-  Market,
-  MarketSchema,
-} from '../../types/kalshi/market';
-import { ErrorResponseSchema } from '../../types/kalshi/base';
+import { MarketResponse, MarketResponseSchema, Market, MarketSchema } from '../types/market';
+import { ErrorResponseSchema } from '../types/base';
 
 const baseUrl: string = process.env.KALSHI_BASE_URL || 'https://demo-api.kalshi.co';
 const basePath = '/trade-api/v2/markets';

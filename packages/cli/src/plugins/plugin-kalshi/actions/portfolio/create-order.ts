@@ -7,10 +7,11 @@ import {
   State,
   type Action,
 } from '@elizaos/core';
-import { createOrder } from '../../../services/kalshi/portfolio';
-import { getMarkets } from '../../../services/kalshi/market';
+import { createOrder } from '../../services/portfolio';
+import { getMarkets } from '../../services/market';
 import { getRandomClosingPhrase, getRandomOpeningPhrase, getRandomRiskWarning } from '../utils';
-import { createOrderRequest } from '../../types/kalshi/portfolio';
+import { createOrderRequest } from '../../types/portfolio';
+import { Market } from '../../types/market';
 
 interface OrderParams {
   ticker: string;
@@ -66,9 +67,7 @@ const action: Action = {
     //   hasOrderKeyword &&
     //   (hasSideKeyword || hasPrice || hasQuantity);
     const isOrderCreation =
-      (mentionsKalshi &&
-      hasActionKeyword &&
-      hasOrderKeyword) || mentionsTelegramCommand;
+      (mentionsKalshi && hasActionKeyword && hasOrderKeyword) || mentionsTelegramCommand;
     return isOrderCreation && text.length > 10;
   },
   handler: async (
@@ -99,7 +98,7 @@ const action: Action = {
 
       // Validate the market exists
       const marketsResponse = await getMarkets(ticker);
-      const market = marketsResponse.markets.find((m) => m.ticker === ticker);
+      const market = marketsResponse.markets.find((m: Market) => m.ticker === ticker);
 
       if (!market) {
         if (callback) {
@@ -254,8 +253,8 @@ const parseOrderFromText = (text: string): OrderParams | null => {
   } else if (lowerText.includes('no')) {
     side = 'no';
   }
-  
-  text = text.replace(/\byes|no\b/i, "")
+
+  text = text.replace(/\byes|no\b/i, '');
 
   // Extract ticker (look for all-caps words, possibly with dashes and numbers)
   const tickerMatch = text.match(/\b([A-Z]+(?:-[A-Z0-9.]+)*)\b/);
@@ -307,6 +306,6 @@ const parseOrderFromText = (text: string): OrderParams | null => {
     side,
     count,
   };
-}
+};
 
 export default action;

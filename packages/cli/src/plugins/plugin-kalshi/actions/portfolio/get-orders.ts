@@ -7,13 +7,11 @@ import {
   State,
   type Action,
 } from '@elizaos/core';
-import { getOrders } from '../../../services/kalshi/portfolio';
-import {
-  getRandomClosingPhrase,
-  getRandomOpeningPhrase,
-  getRandomRiskWarning,
-} from '../utils';
-import { getMarkets } from '../../../services/kalshi/market';
+import { getOrders } from '../../services/portfolio';
+import { getRandomClosingPhrase, getRandomOpeningPhrase, getRandomRiskWarning } from '../utils';
+import { getMarkets } from '../../services/market';
+import { Order } from '../../types/portfolio';
+import { Market } from '../../types/market';
 
 const action: Action = {
   name: 'GET_KALSHI_ORDERS',
@@ -25,7 +23,7 @@ const action: Action = {
     'SHOW_KALSHI_ORDERS',
     'KALSHI_PORTFOLIO_ORDERS',
     'KALSHI_ORDER_STATUS',
-    'KALSHI_MYORDERS'
+    'KALSHI_MYORDERS',
   ],
   description: "Fetch the user's orders from Kalshi. Run this action by itself",
   validate: async (_runtime: IAgentRuntime, message: Memory) => {
@@ -33,14 +31,7 @@ const action: Action = {
     const text = message.content.text ? message.content.text.toLowerCase() : '';
 
     // Enhanced keywords for order/trade context
-    const orderKeywords = [
-      'orders',
-      'order',
-      'positions',
-      'position',
-      'portfolio',
-      'history',
-    ];
+    const orderKeywords = ['orders', 'order', 'positions', 'position', 'portfolio', 'history'];
 
     const actionKeywords = [
       'check',
@@ -60,14 +51,17 @@ const action: Action = {
     const hasOrderKeyword = orderKeywords.some((keyword) => text.includes(keyword));
     const hasActionKeyword = actionKeywords.some((keyword) => text.includes(keyword));
     const mentionsKalshi = text.includes('kalshi');
-    const mentionsTelegramCommand = text.includes('kalshi_myorders')
+    const mentionsTelegramCommand = text.includes('kalshi_myorders');
 
     // More flexible validation - either explicit mention of Kalshi + order terms
     // OR order inquiry in trading context
     const isKalshiOrderRequest = mentionsKalshi && hasOrderKeyword;
     const isGeneralOrderInTradingContext = hasOrderKeyword && hasActionKeyword;
 
-    return (isKalshiOrderRequest || isGeneralOrderInTradingContext || mentionsTelegramCommand) && text.length > 3;
+    return (
+      (isKalshiOrderRequest || isGeneralOrderInTradingContext || mentionsTelegramCommand) &&
+      text.length > 3
+    );
   },
   handler: async (
     _runtime: IAgentRuntime,
@@ -88,7 +82,7 @@ const action: Action = {
         }
         return true;
       }
-      const orderTickers = ordersResponse.orders.map((order) => order.ticker).join(',');
+      const orderTickers = ordersResponse.orders.map((order: Order) => order.ticker).join(',');
       const marketsResponse = await getMarkets(orderTickers);
 
       logger.info('GET_KALSHI_ORDERS orders count:', ordersResponse.orders.length);
@@ -127,7 +121,9 @@ const action: Action = {
         if (recentOrders.length > 0) {
           responseText += `Your ${recentOrders.length < 5 ? recentOrders.length : recentOrdersCount} most recent orders:\n`;
           recentOrders.forEach((order: any, index: number) => {
-            const market = marketsResponse.markets.find((market) => market.ticker === order.ticker);
+            const market = marketsResponse.markets.find(
+              (market: Market) => market.ticker === order.ticker
+            );
             const price =
               order.side === 'yes'
                 ? `$${(order.yes_price / 100).toFixed(2)}`

@@ -1,5 +1,5 @@
-import { EventsResponse, EventsResponseSchema, Event, EventSchema } from '../../types/kalshi/event';
-import { ErrorResponseSchema } from '../../types/kalshi/base';
+import { EventsResponse, EventsResponseSchema, Event, EventSchema } from '../types/event';
+import { ErrorResponseSchema } from '../types/base';
 
 const baseUrl: string = process.env.KALSHI_BASE_URL || 'https://demo-api.kalshi.co';
 const basePath = '/trade-api/v2/events';

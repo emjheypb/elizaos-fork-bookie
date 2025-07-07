@@ -1,9 +1,4 @@
-import {
-  SeriesResponse,
-  SeriesResponseSchema,
-  Series,
-  SeriesSchema,
-} from '../types/series';
+import { SeriesResponse, SeriesResponseSchema, Series, SeriesSchema } from '../types/series';
 import { ErrorResponseSchema } from '../types/base';
 
 const baseUrl: string = process.env.KALSHI_BASE_URL || 'https://demo-api.kalshi.co';

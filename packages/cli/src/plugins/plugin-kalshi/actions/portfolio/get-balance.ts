@@ -7,12 +7,8 @@ import {
   State,
   type Action,
 } from '@elizaos/core';
-import { getBalance } from '../../../services/kalshi/portfolio';
-import {
-  getRandomClosingPhrase,
-  getRandomOpeningPhrase,
-  getRandomRiskWarning,
-} from '../utils';
+import { getBalance } from '../../services/portfolio';
+import { getRandomClosingPhrase, getRandomOpeningPhrase, getRandomRiskWarning } from '../utils';
 
 const action: Action = {
   name: 'GET_KALSHI_BALANCE',
@@ -27,10 +23,9 @@ const action: Action = {
     'SHOW_KALSHI_BALANCE',
     'KALSHI_PORTFOLIO_BALANCE',
     'GET_KALSHI_FUNDS',
-    'KALSHI_MYBALANCE'
+    'KALSHI_MYBALANCE',
   ],
-  description:
-    "Fetch the user's balance in Kalshi. Only run this action by itself.",
+  description: "Fetch the user's balance in Kalshi. Only run this action by itself.",
   validate: async (_runtime: IAgentRuntime, message: Memory) => {
     logger.info('*** Validating GET_KALSHI_BALANCE action ***');
     const text = message.content.text ? message.content.text.toLowerCase() : '';
@@ -66,14 +61,17 @@ const action: Action = {
     const hasBalanceKeyword = balanceKeywords.some((keyword) => text.includes(keyword));
     const hasActionKeyword = actionKeywords.some((keyword) => text.includes(keyword));
     const mentionsKalshi = text.includes('kalshi');
-    const mentionsTelegramCommand = text.includes('kalshi_mybalance')
+    const mentionsTelegramCommand = text.includes('kalshi_mybalance');
 
     // More flexible validation - either explicit mention of Kalshi + balance terms
     // OR balance inquiry in trading context
     const isKalshiBalanceRequest = mentionsKalshi && hasBalanceKeyword;
     const isGeneralBalanceInTradingContext = hasBalanceKeyword && hasActionKeyword;
 
-    return (isKalshiBalanceRequest || isGeneralBalanceInTradingContext || mentionsTelegramCommand) && text.length > 3;
+    return (
+      (isKalshiBalanceRequest || isGeneralBalanceInTradingContext || mentionsTelegramCommand) &&
+      text.length > 3
+    );
   },
   handler: async (
     _runtime: IAgentRuntime,
