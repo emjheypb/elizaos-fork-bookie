@@ -11,6 +11,8 @@ import * as fs from 'node:fs';
 import path from 'node:path';
 import { getElizaCharacter } from '@/src/characters/eliza';
 import { detectDirectoryType } from '@/src/utils/directory-detection';
+import professorOak from "@/src/agents/professor-oak"
+import bookie from "@/src/agents/bookie"
 
 /**
  * Interface for a project module that can be loaded.
@@ -161,7 +163,7 @@ export async function loadProject(dir: string): Promise<Project> {
       };
 
       return {
-        agents: [defaultAgent],
+        agents: [defaultAgent, bookie, professorOak],
         dir,
       };
     }
