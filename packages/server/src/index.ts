@@ -119,18 +119,18 @@ export interface ServerOptions {
 
 /**
  * Determines if the web UI should be enabled based on environment variables.
- * 
+ *
  * @returns {boolean} - Returns true if UI should be enabled, false otherwise
  */
 export function isWebUIEnabled(): boolean {
   const isProduction = process.env.NODE_ENV === 'production';
   const uiEnabledEnv = process.env.ELIZA_UI_ENABLE;
-  
+
   // Treat empty strings as undefined
   if (uiEnabledEnv !== undefined && uiEnabledEnv.trim() !== '') {
     return parseBooleanFromText(uiEnabledEnv);
   }
-  
+
   // Default: enabled in dev, disabled in prod
   return !isProduction;
 }
@@ -189,7 +189,7 @@ export class AgentServer {
     try {
       logger.debug('Initializing AgentServer (async operations)...');
 
-      const agentDataDir = await resolvePgliteDir(options?.dataDir);
+      const agentDataDir = resolvePgliteDir(options?.dataDir);
       logger.info(`[INIT] Database Dir for SQL plugin: ${agentDataDir}`);
       this.database = createDatabaseAdapter(
         {
@@ -859,10 +859,10 @@ export class AgentServer {
 
             console.log(
               `\x1b[32mStartup successful!\x1b[0m\n` +
-              `\x1b[33mWeb UI disabled.\x1b[0m \x1b[32mAPI endpoints available at:\x1b[0m\n` +
-              `  \x1b[1m${baseUrl}/api/server/ping\x1b[22m\x1b[0m\n` +
-              `  \x1b[1m${baseUrl}/api/agents\x1b[22m\x1b[0m\n` +
-              `  \x1b[1m${baseUrl}/api/messaging\x1b[22m\x1b[0m`
+                `\x1b[33mWeb UI disabled.\x1b[0m \x1b[32mAPI endpoints available at:\x1b[0m\n` +
+                `  \x1b[1m${baseUrl}/api/server/ping\x1b[22m\x1b[0m\n` +
+                `  \x1b[1m${baseUrl}/api/agents\x1b[22m\x1b[0m\n` +
+                `  \x1b[1m${baseUrl}/api/messaging\x1b[22m\x1b[0m`
             );
           }
 

@@ -67,44 +67,26 @@ const sidebar: SidebarsConfig = {
       ],
     },
     {
-      type: "category",
-      label: "agents",
+      type: 'category',
+      label: 'agents',
       items: [
         {
-          type: "doc",
-          id: "rest/list-agents",
-          label: "List all agents",
-          className: "api-method get",
-        },
-        {
-          type: "doc",
-          id: "rest/create-agent",
-          label: "Create a new agent",
-          className: "api-method post",
-        },
-        {
-          type: "doc",
-          id: "rest/get-agent",
-          label: "Get agent details",
-          className: "api-method get",
-        },
-        {
-          type: "doc",
-          id: "rest/delete-agent",
-          label: "Delete an agent",
-          className: "api-method delete",
-        },
-        {
-          type: "doc",
-          id: "rest/stop-agent",
-          label: "Stop an agent",
-          className: "api-method post",
+          type: 'doc',
+          id: 'rest/get-debug-servers',
+          label: 'Get server debug info',
+          className: 'api-method get',
         },
         {
           type: 'doc',
-          id: 'rest/start-agent',
-          label: 'Start an agent',
-          className: 'api-method post',
+          id: 'rest/get-servers',
+          label: 'Get server debug info',
+          className: 'api-method get',
+        },
+        {
+          type: 'doc',
+          id: 'rest/get-local-env',
+          label: 'Get local environment variables',
+          className: 'api-method get',
         },
         {
           type: 'doc',
@@ -132,16 +114,10 @@ const sidebar: SidebarsConfig = {
         },
         {
           type: 'doc',
-          id: 'rest/conversation-to-speech',
-          label: 'Process conversation and return speech',
+          id: 'rest/start-agent',
+          label: 'Start an agent',
           className: 'api-method post',
         },
-      ],
-    },
-    {
-      type: 'category',
-      label: 'memory',
-      items: [
         {
           type: 'doc',
           id: 'rest/start-agent',
