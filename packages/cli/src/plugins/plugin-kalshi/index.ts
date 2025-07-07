@@ -3,10 +3,10 @@ import { z } from 'zod';
 
 // import SampleService from './services/sample-service';
 // import sampleProvider from "./providers/sample-provider";
-import getKalshiPortfolioBalance from './actions/kalshi/portfolio/get-balance';
-import getKalshiPortfolioOrders from './actions/kalshi/portfolio/get-orders';
-import getKalshiMarkets from './actions/kalshi/market/get-markets';
-import createOrder from './actions/kalshi/portfolio/create-order';
+import getKalshiMarkets from './actions/market/get-markets';
+import getKalshiPortfolioBalance from './actions/portfolio/get-balance';
+import getKalshiPortfolioOrders from './actions/portfolio/get-orders';
+import createOrder from './actions/portfolio/create-order';
 
 /**
  * Define the configuration schema for the plugin with the following properties:

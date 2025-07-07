@@ -15,9 +15,9 @@ import {
   marketCategories,
   removeCommonWords,
   removeSymbols,
-} from '../../utils';
+} from '../utils';
 import { getEvents } from '../../../services/kalshi/event';
-import { Event } from '../../../types/kalshi/event';
+import { Event } from '../../types/kalshi/event';
 import { getSeriesList } from '../../../services/kalshi/series';
 
 const action: Action = {

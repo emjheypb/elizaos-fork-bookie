@@ -12,7 +12,7 @@ import {
   getRandomClosingPhrase,
   getRandomOpeningPhrase,
   getRandomRiskWarning,
-} from '../../utils';
+} from '../utils';
 import { getMarkets } from '../../../services/kalshi/market';
 
 const action: Action = {

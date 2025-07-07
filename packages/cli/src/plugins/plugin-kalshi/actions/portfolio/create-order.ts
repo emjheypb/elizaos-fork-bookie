@@ -9,8 +9,8 @@ import {
 } from '@elizaos/core';
 import { createOrder } from '../../../services/kalshi/portfolio';
 import { getMarkets } from '../../../services/kalshi/market';
-import { getRandomClosingPhrase, getRandomOpeningPhrase, getRandomRiskWarning } from '../../utils';
-import { createOrderRequest } from '../../../types/kalshi/portfolio';
+import { getRandomClosingPhrase, getRandomOpeningPhrase, getRandomRiskWarning } from '../utils';
+import { createOrderRequest } from '../../types/kalshi/portfolio';
 
 interface OrderParams {
   ticker: string;

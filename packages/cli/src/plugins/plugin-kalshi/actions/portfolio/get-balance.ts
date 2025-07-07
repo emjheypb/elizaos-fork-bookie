@@ -12,7 +12,7 @@ import {
   getRandomClosingPhrase,
   getRandomOpeningPhrase,
   getRandomRiskWarning,
-} from '../../utils';
+} from '../utils';
 
 const action: Action = {
   name: 'GET_KALSHI_BALANCE',

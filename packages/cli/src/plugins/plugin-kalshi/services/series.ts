@@ -3,8 +3,8 @@ import {
   SeriesResponseSchema,
   Series,
   SeriesSchema,
-} from '../../types/kalshi/series';
-import { ErrorResponseSchema } from '../../types/kalshi/base';
+} from '../types/series';
+import { ErrorResponseSchema } from '../types/base';
 
 const baseUrl: string = process.env.KALSHI_BASE_URL || 'https://demo-api.kalshi.co';
 const basePath = '/trade-api/v2/series';
