@@ -163,7 +163,7 @@ export async function loadProject(dir: string): Promise<Project> {
       };
 
       return {
-        agents: [defaultAgent, bookie, professorOak],
+        agents: [bookie, professorOak],
         dir,
       };
     }

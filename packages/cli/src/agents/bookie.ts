@@ -3,9 +3,9 @@ import {
   type IAgentRuntime,
   type ProjectAgent,
   type Character,
-  messageHandlerTemplate,
 } from '@elizaos/core';
 import kalshiPlugin from '../plugins/plugin-kalshi';
+import { messageHandler } from '../prompts';
 
 export const character: Character = {
   name: 'Bookie',
@@ -129,7 +129,7 @@ export const character: Character = {
     ],
   },
   templates: {
-    messageHandlerTemplate,
+    messageHandler,
   },
 };
 

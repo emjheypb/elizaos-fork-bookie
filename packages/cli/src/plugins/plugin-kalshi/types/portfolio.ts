@@ -24,7 +24,7 @@ export const OrderSchema = z.object({
   queue_position: z.number().int(),
   remaining_count: z.number().int(),
   side: z.enum(['yes', 'no']),
-  status: z.enum(['resting', 'canceled', 'executed', 'pending']),
+  status: z.enum(['resting', 'canceled', 'executed', 'pending', 'unknown']),
   taker_fees: z.number().int(),
   taker_fill_cost: z.number().int(),
   ticker: z.string(),
