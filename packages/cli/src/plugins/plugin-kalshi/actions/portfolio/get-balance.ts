@@ -8,7 +8,7 @@ import {
   type Action,
 } from '@elizaos/core';
 import { getBalance } from '../../services/portfolio';
-import { getRandomClosingPhrase, getRandomOpeningPhrase, getRandomRiskWarning } from '../utils';
+import { getRandomClosingPhrase, getRandomOpeningPhrase, getRandomRiskWarning } from '../../../utils';
 
 const action: Action = {
   name: 'GET_KALSHI_BALANCE',

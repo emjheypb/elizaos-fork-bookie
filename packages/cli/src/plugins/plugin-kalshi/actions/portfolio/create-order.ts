@@ -9,7 +9,7 @@ import {
 } from '@elizaos/core';
 import { createOrder } from '../../services/portfolio';
 import { getMarkets } from '../../services/market';
-import { getRandomClosingPhrase, getRandomOpeningPhrase, getRandomRiskWarning } from '../utils';
+import { getRandomClosingPhrase, getRandomOpeningPhrase, getRandomRiskWarning } from '../../../utils';
 import { createOrderRequest } from '../../types/portfolio';
 import { Market } from '../../types/market';
 

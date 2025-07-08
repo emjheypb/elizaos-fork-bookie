@@ -8,7 +8,7 @@ import {
   type Action,
 } from '@elizaos/core';
 import { getOrders } from '../../services/portfolio';
-import { getRandomClosingPhrase, getRandomOpeningPhrase, getRandomRiskWarning } from '../utils';
+import { getRandomClosingPhrase, getRandomOpeningPhrase, getRandomRiskWarning } from '../../../utils';
 import { getMarkets } from '../../services/market';
 import { Order } from '../../types/portfolio';
 import { Market } from '../../types/market';

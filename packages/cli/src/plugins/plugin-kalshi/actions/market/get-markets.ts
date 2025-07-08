@@ -15,7 +15,7 @@ import {
   marketCategories,
   removeCommonWords,
   removeSymbols,
-} from '../utils';
+} from '../../../utils';
 import { getEvents } from '../../services/event';
 import { Event } from '../../types/event';
 import { getSeriesList } from '../../services/series';
