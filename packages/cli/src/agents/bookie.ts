@@ -3,9 +3,10 @@ import {
   type IAgentRuntime,
   type ProjectAgent,
   type Character,
+  messageHandlerTemplate,
 } from '@elizaos/core';
 import kalshiPlugin from '../plugins/plugin-kalshi';
-import { messageHandler } from '../prompts';
+import polymarketPlugin from '../plugins/plugin-polymarket';
 
 export const character: Character = {
   name: 'Bookie',
@@ -129,7 +130,7 @@ export const character: Character = {
     ],
   },
   templates: {
-    messageHandler,
+    messageHandlerTemplate,
   },
 };
 
@@ -154,7 +155,7 @@ const initCharacter = ({}: { runtime: IAgentRuntime }) => {
 const agent: ProjectAgent = {
   character,
   init: async (runtime: IAgentRuntime) => await initCharacter({ runtime }),
-  plugins: [kalshiPlugin],
+  plugins: [kalshiPlugin, polymarketPlugin],
 };
 
 export default agent;

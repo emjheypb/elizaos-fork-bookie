@@ -1,6 +1,11 @@
-import { logger, type IAgentRuntime, type ProjectAgent, type Character } from '@elizaos/core';
+import {
+  logger,
+  type IAgentRuntime,
+  type ProjectAgent,
+  type Character,
+  messageHandlerTemplate,
+} from '@elizaos/core';
 import pokemonPlugin from '../plugins/plugin-pokemon';
-import { messageHandler } from '../prompts';
 
 export const character: Character = {
   name: 'Professor Oak',
@@ -117,7 +122,7 @@ export const character: Character = {
     ],
   },
   templates: {
-    messageHandler,
+    messageHandlerTemplate,
   },
 };
 
