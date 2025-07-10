@@ -54,15 +54,12 @@ export const getSeries = async (ticker: string): Promise<Series> => {
   }
 };
 
-export const getSeriesList = async (category?: string): Promise<SeriesResponse> => {
+export const getSeriesList = async (words: string[]): Promise<SeriesResponse> => {
   const method: string = 'GET';
   const path: string = basePath;
-  const queryParams = new URLSearchParams({
-    category: category || '',
-  });
 
   try {
-    const response = await fetch(baseUrl + path + '?' + queryParams.toString(), {
+    const response = await fetch(baseUrl + path + '?', {
       method,
     });
 
@@ -86,8 +83,18 @@ export const getSeriesList = async (category?: string): Promise<SeriesResponse> 
 
     // Validate and parse successful response
     const validatedResponse = SeriesResponseSchema.parse(responseData);
+    const seriesResponse = validatedResponse.series.filter(
+      (series) =>
+        words.every(
+          (word) =>
+            series.title.toLowerCase().includes(word) ||
+            (series.category && series.category.toLowerCase().includes(word)) ||
+            (series.tags && series.tags.map((item) => item.toLowerCase()).includes(word))
+        ) || words.includes(series.ticker.toLowerCase())
+    );
     console.log('Series Count:', validatedResponse.series.length);
 
+    validatedResponse.series = seriesResponse;
     return validatedResponse;
   } catch (error: any) {
     console.error('Error:', error.message);

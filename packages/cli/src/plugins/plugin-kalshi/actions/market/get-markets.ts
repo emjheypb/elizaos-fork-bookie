@@ -94,18 +94,6 @@ const action: Action = {
   ) => {
     logger.info('*** Executing GET_KALSHI_TRADES action ***');
     try {
-      const seriesResponse = await getSeriesList();
-      if (!seriesResponse || !seriesResponse.series) {
-        if (callback) {
-          logger.error('GET_KALSHI_TRADES No series found in response');
-          await callback({
-            text: `I'm having connection issues with Kalshi right now and can't pull the available markets. The platform might be having hiccups - try again in a few minutes.`,
-          });
-        }
-        return true;
-      }
-      logger.info(`GET_KALSHI_TRADES Series count: ${seriesResponse.series.length}`);
-
       const text = message.content.text ? message.content.text.toLowerCase() : '';
 
       // Extract meaningful words from user input
@@ -123,49 +111,38 @@ const action: Action = {
       }
       logger.info(`GET_KALSHI_TRADES words: ${words}`);
 
+      if (callback) {
+        await callback({
+          text: `Getting possible trades for "${words.join(" ")}".`,
+        });
+      }
+
+      const seriesResponse = await getSeriesList(words);
+      if (!seriesResponse || !seriesResponse.series || seriesResponse.series.length === 0) {
+        if (callback) {
+          logger.error('GET_KALSHI_TRADES No series found in response');
+          await callback({
+            text: `I couldn't find any active trades matching "${words}". ${getRandomMarketInsight()}`,
+          });
+        }
+        return true;
+      }
+      logger.info(`GET_KALSHI_TRADES Series count: ${seriesResponse.series.length}`);
+
       const seriesList = seriesResponse.series || [];
-      const filteredSeries = seriesList.filter(
-        (series) =>
-          series.category
-            .toLowerCase()
-            .split(/\s+/)
-            .some((word) => words.includes(word)) ||
-          series.title
-            .toLowerCase()
-            .split(/\s+/)
-            .some((word) => words.includes(word)) ||
-          (series.tags ?? []).some((tag) =>
-            tag
-              .toLowerCase()
-              .split(/\s+/)
-              .some((word) => words.includes(word))
-          ) ||
-          words.includes(series.ticker.toLowerCase())
-      );
-      filteredSeries.sort((a, b) => {
+      seriesList.sort((a, b) => {
         if (words.includes(a.ticker.toLowerCase())) {
           return -1; // 'a' (the specific value) comes first
         } else if (words.includes(b.ticker.toLowerCase())) {
           return 1; // 'b' (the specific value) comes first
         } else {
-          // For other elements, maintain their original relative order or sort alphabetically/numerically
-          return a.title.localeCompare(b.title); // Example: sort remaining alphabetically
+          // sort alphabetically by title
+          return a.title.localeCompare(b.title);
         }
       });
 
-      if (filteredSeries.length === 0) {
-        logger.error('GET_KALSHI_TRADES No Filtered Series found for words:', words);
-        if (callback) {
-          await callback({
-            text: `I couldn't find any active trades matching "${words}". ${getRandomMarketInsight()}`,
-          });
-        }
-        return false;
-      }
-      logger.info(`GET_KALSHI_TRADES Filtered Series count: ${filteredSeries.length}`);
-
       let events: Event[] = [];
-      for (const series of filteredSeries) {
+      for (const series of seriesList) {
         const event = await getEvents(series.ticker);
         if (!event || !event.events || event.events.length === 0) {
           // logger.error(`No events found for series: ${series.title} (${series.ticker})`);
@@ -182,6 +159,11 @@ const action: Action = {
             return;
           }
 
+          e.markets.sort((a, b) => {
+            // sort by earliest close time first
+            return new Date(a.close_time).getTime() - new Date(b.close_time).getTime();
+          });
+
           events.push(e);
           console.log(`Series ${series.ticker} Event Added: ${event.events[0].event_ticker}`);
         });
@@ -197,15 +179,10 @@ const action: Action = {
         return false;
       }
 
-      let responseText = `${getRandomOpeningPhrase()} `;
-      if (words.length > 0) {
-        responseText += `Found ${events.length} available trades matching "${words}":\n`;
-      } else {
-        responseText += `Here are ${events.length} available trades right now:\n`;
-      }
-
       const displayCount = Math.min(events.length, 10);
       const topEvents = events.slice(0, displayCount);
+
+      let responseText = `${getRandomOpeningPhrase()} Here are ${displayCount} available trades right now for "${words.join(' ')}":\n`;
 
       topEvents.forEach((event, index: number) => {
         if (!event || !event.markets) return; // Skip if no event found for this series
@@ -218,7 +195,7 @@ const action: Action = {
             ? new Date(market.close_time).toLocaleDateString()
             : 'TBD';
 
-          responseText += `\t- ${market.title}${market.subtitle ? ` ${market.subtitle}` : ''}${!market.title && !market.subtitle ? market.yes_sub_title : ''} (${market.ticker})\n`;
+          responseText += `\t- ${market.title}${market.subtitle ? ` ${market.subtitle}` : ''}${!market.title && !market.subtitle ? market.yes_sub_title : ''} (ID: ${market.ticker})\n`;
           responseText += `\t\tYES: ${yesPrice} | NO: ${noPrice} | Closes: ${closeDate}\n`;
         });
       });
